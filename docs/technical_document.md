@@ -47,11 +47,11 @@ lifetimes, tracks per frame. Each copy is also used with home and away swapped.
    marks the other.
 2. **Two heads** (LightGBM): P(ball dead) and P(home has it | ball in play).
 3. **Match evidence**, added as log-odds towards `D`:
-   - the first 2 s of a Smart Tagging set piece (a set piece is a restart, so the ball was dead);
-   - frames no Smart Tagging phase covers;
-   - **referee whistles** from the video's audio: the whistle at each tagged kick-off becomes a
-     template of this referee's whistle, and later frames are scored by similarity to it.
-     Its threshold gives as many whistles as a DFL match has whistled events (34).
+     - the first 2 s of a Smart Tagging set piece (a set piece is a restart, so the ball was dead);
+     - frames no Smart Tagging phase covers;
+     - **referee whistles** from the video's audio: the whistle at each tagged kick-off becomes a
+       template of this referee's whistle, and later frames are scored by similarity to it.
+       Its threshold gives as many whistles as a DFL match has whistled events (34).
 4. **Switch head** (LightGBM): P(possession changes within 0.5 s), from features that compare the
    second before a frame with the second after.
 5. **Candidate possessions.** A duration model learns from labels how long possessions and

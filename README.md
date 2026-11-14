@@ -37,9 +37,8 @@ python3.11 -m venv .venv
 `predict.py` writes `submission/paloma.csv`, checks it with the organisers' validator and
 prints its MD5. The file we submitted has MD5 **`f3607b7aa88ff98c4f476c492d6c8504`**.
 
-The first run takes a few minutes: it parses the tracking into `data/cache/` and extracts the
-audio into `data/audio/` (we used ffmpeg 9.0.2). After that it takes about 15 seconds on a laptop
-(Apple M-series, 8 GB).
+It takes under a minute on a laptop (Apple M-series, 8 GB). The first run also parses the
+tracking into `data/cache/` and extracts the audio into `data/audio/` (we used ffmpeg 9.0.2).
 
 **Retrain the models (optional).** `models/` holds the trained models. To rebuild them from the
 open data (about 40 minutes):
