@@ -1,0 +1,10 @@
+# Match data: licensed for the competition only, never committed.
+data/*
+!data/README.md
+# Output of predict.py
+submission/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
