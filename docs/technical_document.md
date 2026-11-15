@@ -13,9 +13,9 @@ predictions. It proposes candidate possessions and keeps the set most likely to 
 
 | check (no labels of this match) | spellF1 |
 |---|---|
-| held-out Metrica matches (models trained without the match) | **0.726** |
-| held-out DFL matches | **0.633** |
-| public 5 minutes (17 possessions; a pipeline check only) | 0.700 |
+| held-out Metrica matches (models trained without the match) | **0.738** |
+| held-out DFL matches | **0.650** |
+| public 5 minutes (17 possessions; a pipeline check only) | 0.759 |
 | organisers' baseline, full match | 0.243 |
 
 ## 2. The approach, and why
@@ -79,11 +79,20 @@ on decodes of held-out matches, chooses better.
 | switch head, read by the rescorer | 0.687 |
 | extra candidates cut at the switch head's peaks | 0.698 |
 | interaction features in the heads + boundary model | 0.721 |
-| control radius chosen on held-out matches (1.0 m instead of 1.5 m), all models retrained | **0.726** |
+| control radius chosen on held-out matches (1.0 m instead of 1.5 m), all models retrained | 0.726 |
+| dead / team heads trained for 1,500 trees instead of 300, rescorer and boundary model retrained | **0.738** |
 
 Each step was accepted only if it improved on held-out matches. Settings were chosen on copies
-with seeds 888/999 and confirmed on seed 777. The switch head and the last step each improved
-every one of the 10 held-out matches.
+with seeds 888/999 and confirmed on seed 777. The switch head and the last two steps each improved
+every one of the 10 held-out matches. The last step was also confirmed on fresh copies (seed 555)
+that no decision had used: +0.013 spellF1, all 10 matches better.
+
+**How many trees in the heads.** The two heads used to stop at 300 boosting rounds (trees), a
+default from early on. Watching the error on held-out matches as trees are added, the DFL matches
+(whose labels are the same kind as this challenge's) kept improving until roughly 800–1,800
+trees. At 1,500 the held-out score rose on every held-out match; at 4,000 the held-out error
+started to rise again, so we stopped at 1,500. The switch head stays at 300: more trees made it
+slightly better on its own but changed nothing after the rescorer.
 
 ## 4. Assets: used and dropped
 
@@ -158,5 +167,5 @@ python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python predict.py      # -> submission/paloma.csv, prints its MD5
 ```
 
-`train.py` retrains every model from the open data (about 40 minutes) and rebuilds `models/`
+`train.py` retrains every model from the open data (about an hour) and rebuilds `models/`
 exactly. Details are in the repository's README and training/README.md.

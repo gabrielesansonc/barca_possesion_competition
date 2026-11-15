@@ -1,6 +1,6 @@
 """Train every model in models/ from open data of other matches.
 
-About 40 minutes on a laptop with 8 GB, plus downloading the open data the first time.
+About an hour on a laptop with 8 GB, plus downloading the open data the first time.
 
     python train.py                  # overwrites models/
     python train.py --out new_models # writes somewhere else, to compare with models/

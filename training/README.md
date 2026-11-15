@@ -2,7 +2,7 @@
 
 ```bash
 .venv/bin/pip install -r requirements-train.txt
-.venv/bin/python train.py                  # rewrites models/ (about 40 minutes)
+.venv/bin/python train.py                  # rewrites models/ (about an hour)
 .venv/bin/python train.py --out new_models # or write elsewhere and compare with models/
 ```
 

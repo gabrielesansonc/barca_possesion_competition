@@ -1,6 +1,6 @@
 """Train every model in models/ from open data of other matches.
 
-    python train.py              # writes models/ (about 40 minutes on a laptop with 8 GB)
+    python train.py              # writes models/ (about an hour on a laptop with 8 GB)
 
 Training data: 10 matches with per-frame possession labels (see training/README.md).
   Metrica sample data   3 matches, labels from their event data (ext_labels.py)
@@ -75,7 +75,8 @@ SHIFTED = {"ix_ball_acc", "ix_relspeed_h", "ix_relspeed_a", "ix_relspeed_near", 
 HEAD_PARAMS = {"objective": "binary", "learning_rate": 0.05, "num_leaves": 31, "min_data_in_leaf": 200,
                "feature_fraction": 0.8, "bagging_fraction": 0.8, "bagging_freq": 1, "lambda_l2": 1.0,
                "num_threads": 3, "seed": 0, "deterministic": True, "force_row_wise": True, "verbose": -1}
-HEAD_ROUNDS = 300
+HEAD_ROUNDS = 1500       # dead / team heads (held-out log loss bottoms out near here on the DFL matches)
+SWITCH_ROUNDS = 300
 RESCORER_PARAMS = {"objective": "cross_entropy", "learning_rate": 0.03, "num_leaves": 31,
                    "min_data_in_leaf": 300, "feature_fraction": 0.8, "bagging_fraction": 0.8,
                    "bagging_freq": 1, "lambda_l2": 1.0, "num_threads": 3, "seed": 0,
@@ -213,7 +214,7 @@ def fit_switch(tables):
     import lightgbm as lgb
     cols = [c for c in tables[0].columns if c != "_y"]
     T = pd.concat(tables, ignore_index=True)
-    return lgb.train(HEAD_PARAMS, lgb.Dataset(T[cols], label=T["_y"]), HEAD_ROUNDS), cols
+    return lgb.train(HEAD_PARAMS, lgb.Dataset(T[cols], label=T["_y"]), SWITCH_ROUNDS), cols
 
 
 # -- 4. held-out copies ---------------------------------------------------------------------------
@@ -368,7 +369,8 @@ def train_all(out=MODELS_DIR):
     switch, switch_cols = fit_switch([switch_tabs[k] for k in MATCHES])
     switch.save_model(os.path.join(out, "switch_head.txt"))
     _log("4. held-out copies")
-    heldout = _cached("heldout", lambda: heldout_copies(stats, head_tabs, switch_tabs))
+    heldout = _cached("heldout_h{}_s{}".format(HEAD_ROUNDS, SWITCH_ROUNDS),   # depends on the round counts
+                      lambda: heldout_copies(stats, head_tabs, switch_tabs))
     del head_tabs, switch_tabs
     _log("5. rescorer")
     cands = candidate_rows(heldout)

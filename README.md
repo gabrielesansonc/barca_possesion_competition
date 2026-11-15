@@ -35,13 +35,13 @@ python3.11 -m venv .venv
 ```
 
 `predict.py` writes `submission/paloma.csv`, checks it with the organisers' validator and
-prints its MD5. The file we submitted has MD5 **`f3607b7aa88ff98c4f476c492d6c8504`**.
+prints its MD5. The file we submitted has MD5 **`688141c2bde5b9be562e87d3dd365ef1`**.
 
 It takes under a minute on a laptop (Apple M-series, 8 GB). The first run also parses the
 tracking into `data/cache/` and extracts the audio into `data/audio/` (we used ffmpeg 9.0.2).
 
 **Retrain the models (optional).** `models/` holds the trained models. To rebuild them from the
-open data (about 40 minutes):
+open data (about an hour):
 
 ```bash
 .venv/bin/pip install -r requirements-train.txt
@@ -92,9 +92,9 @@ The ranking uses the private full-match labels, which nobody has. These are our 
 
 | check | spellF1 |
 |---|---|
-| held-out Metrica matches (model trained without that match) | 0.726 |
-| held-out DFL matches | 0.633 |
-| the 5 public minutes (17 possessions: a sanity check only, never used to choose anything) | 0.700 |
+| held-out Metrica matches (model trained without that match) | 0.738 |
+| held-out DFL matches | 0.650 |
+| the 5 public minutes (17 possessions: a sanity check only, never used to choose anything) | 0.759 |
 | organisers' baseline, full match | 0.243 |
 
 ---

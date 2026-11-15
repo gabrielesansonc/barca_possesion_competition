@@ -13,6 +13,8 @@ sample matches, 7 DFL Bundesliga matches), never from Barcelona vs Athletic.
 | `columns.json` | input columns of the switch head and the rescorer | |
 | `prior.json` | how long possessions and stoppages last, and what follows what | labels of the 3 Metrica matches |
 
+Trees per model: dead and team heads 1,500 each, switch head 300, rescorer 700, boundary model 300.
+
 The `.txt` files are LightGBM models in its text format (LightGBM 4.5.0); open them with
 `lightgbm.Booster(model_file=...)`. "Held-out decodes" means each match was decoded by models
 trained without it, so the rescorer and boundary model learn from realistic mistakes.
