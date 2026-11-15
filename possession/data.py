@@ -27,8 +27,7 @@ import possession_metrics as pm  # noqa: E402
 
 # Params
 CACHE_DIR = os.path.join(DATA_DIR, "cache")
-CACHE_VERSION = 1  # bump when the cache layout changes, to force a rebuild
-PUBLIC_GT = os.path.join(COMPETITION, "evaluation", "gt", "BAR-ATH_possession_gt_public.csv")
+CACHE_VERSION = 2  # bump when the cache layout changes, to force a rebuild
 N_SLOTS = 46
 HOME, AWAY = 0, 1
 
@@ -47,7 +46,6 @@ class Match:
     half: np.ndarray          # (n,) int8, 1 / 2 on graded frames, 0 elsewhere
     homography: np.ndarray    # (n, 3, 3) float32, normalised pitch -> pixels
     reproj_error: np.ndarray  # (n,) float32
-    gt_public: np.ndarray     # (n,) int8 label codes (pm.H, pm.A, pm.D, pm.X)
     tagging: pd.DataFrame     # one row per Smart Tagging instance, frames half-open
     pitch: tuple              # (length, width) in metres
     touch_ball: np.ndarray = None  # (n, 2) optional second ball track (training copies only)
@@ -151,7 +149,6 @@ def build_cache(game=GAME, cache_dir=CACHE_DIR):
     if len(matrices) != n_frames:
         raise ValueError("homography has {} rows, expected {}".format(len(matrices), n_frames))
 
-    gt_public = pm.label_codes(pm.read_label_csv(PUBLIC_GT))
     tagging = parse_tagging(game)
 
     os.makedirs(cache_dir, exist_ok=True)
@@ -164,7 +161,7 @@ def build_cache(game=GAME, cache_dir=CACHE_DIR):
         ball=ball, ball_speed=ball_speed,
         half=half_array(n_frames, game),
         homography=matrices.astype(np.float32), reproj_error=reproj_error.astype(np.float32),
-        gt_public=gt_public, pitch=np.array(pitch),
+        pitch=np.array(pitch),
     )
     tagging.to_csv(base + "_tagging.csv", index=False)
     return base + ".npz"
@@ -195,5 +192,5 @@ def load_match(game=GAME, cache_dir=CACHE_DIR, rebuild=False):
         players=npz["players"], player_speed=npz["player_speed"], team=npz["team"],
         ball=npz["ball"], ball_speed=npz["ball_speed"], half=npz["half"],
         homography=npz["homography"], reproj_error=npz["reproj_error"],
-        gt_public=npz["gt_public"], tagging=tagging, pitch=tuple(npz["pitch"].tolist()),
+        tagging=tagging, pitch=tuple(npz["pitch"].tolist()),
     )

@@ -258,7 +258,7 @@ def load_dfl(match_id):
     n = len(z["ball"])
     m = Match(players=players, player_speed=speed_from_positions(players), team=z["team"],
               ball=z["ball"], ball_speed=None, half=z["half"], homography=None, reproj_error=None,
-              gt_public=np.full(n, pm.X, dtype=np.int8), tagging=pd.DataFrame(),
+              tagging=pd.DataFrame(),
               pitch=tuple(float(v) for v in z["pitch"]))
     events = pd.read_csv(os.path.join(DFL_DIR, match_id + "_events.csv"))
     text = events.select_dtypes(exclude="number").columns

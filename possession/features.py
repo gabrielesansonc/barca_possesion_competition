@@ -214,9 +214,8 @@ def tagging_features(m):
         if row.code == "SET PIECES":
             frames = np.arange(row.start_frame, min(n, row.start_frame + int(TIME_CAP * FPS)))
             since_sp[frames] = np.minimum(since_sp[frames], (frames - row.start_frame) / FPS)
-    # tag_gap: no phase tag covers the frame. Phases are cut when play stops (offside at 12851:
-    # transition tags end on the first D frame), so gaps are mostly stoppages (silver labels, full
-    # match: 68% dead in gaps vs 24% tagged)
+    # tag_gap: no phase tag covers the frame. Smart Tagging cuts its phases when play stops, so
+    # gaps between phases tend to be stoppages; the models learn how much to trust that.
     return {"tag_team": np.sign(team),
             "tag_t_since_setpiece": np.minimum(since_sp, TIME_CAP).astype(np.float32),
             "tag_gap": (~phase).astype(np.float32)}

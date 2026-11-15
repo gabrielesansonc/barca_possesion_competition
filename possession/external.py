@@ -7,7 +7,7 @@ these matches are the only training data for the learned model.
 
 Each match comes back as a possession.data.Match, so possession.features builds identical features for it,
 plus its event list. Arrays are indexed by frame - 1. Fields that only BAR-ATH has (homography,
-Smart Tagging, the ATD speed field) are None or empty; gt_public holds nothing (pm.X): the event
+Smart Tagging, the ATD speed field) are None or empty. The event
 labels come from possession.ext_labels.
 
     from possession.external import load_external, EXTERNAL_GAMES
@@ -128,7 +128,7 @@ def load_external(game):
     m = Match(
         players=players.astype(np.float32), player_speed=speed_from_positions(players), team=team,
         ball=ball.astype(np.float32), ball_speed=None, half=period.astype(np.int8),
-        homography=None, reproj_error=None, gt_public=np.full(n, pm.X, dtype=np.int8),
+        homography=None, reproj_error=None,
         tagging=pd.DataFrame(), pitch=PITCH,
     )
     return m, events.sort_values("start_frame", kind="stable", ignore_index=True)
