@@ -1,0 +1,7 @@
+# Extra packages for notebooks/pipeline_walkthrough.ipynb. Python 3.11.
+-r requirements-train.txt
+ipykernel==7.4.0
+matplotlib==3.11.2
+nbconvert==7.17.2
+nbformat==5.11.1
+scikit-learn==1.9.1

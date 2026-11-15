@@ -57,6 +57,7 @@ open data (about an hour):
 | [predict.py](predict.py) | the one command: data in, submission out |
 | [possession/](possession/) | the method, as a Python package |
 | [possession/pipeline.py](possession/pipeline.py) | **start here**: every step, in order |
+| [notebooks/pipeline_walkthrough.ipynb](notebooks/pipeline_walkthrough.ipynb) | the pipeline one model at a time: targets, sample rows, feature impact, held-out validation, output on this match, every hand-picked constant (`pip install -r requirements-notebook.txt`) |
 | [models/](models/) | the trained models (LightGBM text files) and the decoder's prior |
 | [train.py](train.py), [possession/training.py](possession/training.py) | retrain every model from the open data |
 | [training/](training/) | what each model learned, and from which data |
